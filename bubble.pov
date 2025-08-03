@@ -1,6 +1,6 @@
-/* bubble.pov version 2.0
+/* bubble.pov version 2.0.1
  * Persistence of Vision Raytracer scene description file
- * POV-Ray Object Collection
+ * POV-Ray Object Collection demo
  *
  * Copyright (C) 2025 Richard Callwood III.  Some rights reserved.
  * This file is licensed under the terms of the GNU-LGPL
@@ -16,9 +16,10 @@
  * visit https://www.gnu.org/licenses/lgpl-3.0.html for the text
  * of the GNU Lesser General Public License version 3.
  *
- * Vers  Date         Notes
- * ----  ----         -----
- * 2.0   21-May-2025  Created.
+ * Vers.  Date         Notes
+ * -----  ----         -----
+ * 2.0    2025-May-21  Created.
+ * 2.0.1  2025-Aug-02  No change.
  */
 // +W800 +H600 +A +R5
 // +W160 +H120 +A +R5 Declare=Cam=2 +Obubble_thumbnail

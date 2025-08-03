@@ -1,6 +1,6 @@
 Carbonated fluid bubble generator
 Created by Charles Robertson, 14 July 2009
-Modified by Richard Callwood III, 21 May 2025
+Modified by Richard Callwood III, 2 August 2025
 
 Optimised for POV-Ray 3.6, works with 3.5...3.8
 
@@ -11,4 +11,4 @@ Bubble start end position and radius can be modified
 Bubble column quantity can be modified
 Bubble texture can be modified
 
-In version 2.0, the texture can be omitted.
+In version 2.0.1, the texture can be omitted.

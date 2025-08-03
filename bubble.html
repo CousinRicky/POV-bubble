@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bubble 2.0.1 User Manual | POV-Ray Object Collection</title>
+<style>
+table
+{ border-collapse:collapse;
+  border:1px solid gray;
+}
+td, th
+{ border:1px solid gray;
+  padding:0 0.2em;
+}
+code
+{ font-family:"Consolas", "Liberation Mono", monospace;
+}
+</style>
+</head>
+
+<h1>Bubble 2.0.1 User Manual</h1>
+
+<p>
+<img src="bubble_thumbnail.jpg" alt="[Bubble thumbnail illustration]" style="float:right">
+Bubble is a library module from the
+<a href="https://www.povray.org/">Persistence of Vision Raytracer (POV-Ray)</a>
+<a href="https://lib.povray.org/">Object Collection</a>.
+
+<h2>Description</h2>
+
+<p>Creates columns of bubbles, representing CO<sub>2</sub> inside a fluid.
+<ul>
+ <li>Bubbles increase in size the higher they ascend, in line with a decrease in fluid pressure.
+ <li>Bubbles columns are placed randomly within a specified box.
+ <li>Bubble start/end position can be specified.
+ <li>Bubble start/end radius can be specified.
+ <li>Bubble column quantity can be specified.
+ <li>Bubbles optionally may have a texture.
+ <li>Optimised for POV-Ray 3.6, but works with versions 3.5 through 3.8.
+</ul>
+
+<h2>Macros</h2>
+
+<dl>
+ <dt><code><b>Bubble_mGenerator</b> (sFluidX, sFluidY, sFluidZ, eFluidX, eFluidY, eFluidZ, fRadius, fHeightRngE, fBblHeightRngS, fBblHeightRngE, columnNm, bblTx)</code>
+ <dd>Returns an object comprising columns of bubbles with a texture.
+ <dt><code><b>Bubble_Generator</b> (sFluidX, sFluidY, sFluidZ, eFluidX, eFluidY, eFluidZ, fRadius, fHeightRngE, fBblHeightRngS, fBblHeightRngE, columnNm)</code>
+ <dd>Returns an object comprising columns of bubbles without a texture.
+</dl>
+
+<h3>Macro Arguments</h3>
+
+<table>
+ <tr><th>Formal Parameter</th> <th>Type</th> <th>Description</th></tr>
+ <tr>
+  <td><code>sFluidX</code></td>
+  <td>float</td>
+  <td rowspan="3"><code>&lt;sFluidX, sFluidY, sFluidZ></code> is the lower endpoint of the axis of the cylinder in which the bubbles emanate. Note that bubbles will be created within a box that circumscribes the cylinder.</td>
+ </tr><tr>
+  <td><code>sFluidY</code></td>
+  <td>float</td>
+ </tr><tr>
+  <td><code>sFluidZ</code></td>
+  <td>float</td>
+ </tr><tr>
+  <td><code>eFluidX</code></td>
+  <td>float</td>
+  <td>Uncertain purpose (the cylinder will always be vertical)</td>
+ </tr><tr>
+  <td><code>eFluidY</code></td>
+  <td>float</td>
+  <td>The upper height of the axis of the cylinder in which the bubbles emanate</td>
+ </tr><tr>
+  <td><code>eFluidZ</code></td>
+  <td>float</td>
+  <td>Uncertain purpose (the cylinder will always be vertical)</td>
+ </tr><tr>
+  <td><code>fRadius</code></td>
+  <td>float</td>
+  <td>The radius of the cylinder in which the bubbles emanate</td>
+ </tr><tr>
+  <td><code>fHeightRngE</code></td>
+  <td>float</td>
+  <td>The height at which the bubbles emanate; this should be between <code>sFluidY</code> and <code>eFluidY</code></td>
+ </tr><tr>
+  <td><code>fBblHeightRngS</code></td>
+  <td>float</td>
+  <td>The smallest radius of the bubbles near the bottom</td>
+ </tr><tr>
+  <td><code>fBblHeightRngE</code></td>
+  <td>float</td>
+  <td>The largest radius of the bubbles near the bottom</td>
+ </tr><tr>
+  <td><code>columnNm</code></td>
+  <td>float</td>
+  <td>The number of randomly placed bubble columns</td>
+ </tr><tr>
+  <td><code>bblTx</code></td>
+  <td>float</td>
+  <td>Texture of bubble&mdash;required only by macro <code>Bubble_mGenerator()</code></td>
+ </tr>
+</table>
+
+<h2>About Bubble</h2>
+
+<address>
+ <p>Copyright © 2009 Charles Robertson.  Some rights reserved.
+ <p>Modifications copyright © 2025 Richard Callwood III.  Some rights reserved.
+ <p>This library is free software: you can redistribute it and/or modify it under the terms of the <a href="https://www.gnu.org/licenses/lgpl-3.0.html" target="_blank">GNU Lesser General Public License</a> as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ <p>This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</address>
+
+<h2>A Note about This User Manual</h2>
+
+<p>This user manual was not written by the original author of this library; it was composed based on the observed behavior of macro <code>Bubble_mGenerator()</code>. This has resulted in discrepancies between this manual and the comments in file <code>bubble.inc</code>.
+
+<h2>Change Log</h2>
+
+<table>
+ <tr>
+  <th>Version</th> <th>Date</th> <th>Notes</th> <th>Author</th>
+ </tr><tr>
+  <td>3.6</td>
+  <td>14 July 2009</td>
+  <td>
+   <ul>
+    <li>Created
+   </ul>
+  </td>
+  <td>Charles Robertson</td>
+ </tr><tr>
+  <td>2.0</td>
+  <td>21 May 2025</td>
+  <td>
+   <ul>
+    <li>Identifiers are brought into namespace compliance. In particular, macro <code>mBubbleGenerator()</code> is renamed to <code>Bubble_mGenerator()</code>.
+    <li>Macro <code>Bubble_Generator()</code> is added for untextured bubbles.
+    <li>The randomization is simplified, and a bias towards the +<var>x</var>+<var>z</var> quadrant is corrected.
+   </ul>
+  </td>
+  <td>Richard Callwood III</td>
+ </tr><tr>
+  <td>2.0.1</td>
+  <td>2 August 2025</td>
+  <td>
+   <ul>
+    <li>The first column of bubbles is randomized, rather than forced to the y-axis.
+    <li>The usual include file wrapper is added.
+   </ul>
+  </td>
+  <td>Richard Callwood III</td>
+ </tr>
+</table>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-// bubble.inc version 2.0
+// bubble.inc version 2.0.1
 // Persistence of Vision Raytracer include file
 // POV-Ray Object Collection
 
@@ -24,6 +24,9 @@
 //      Macro mBubbleGenerator() is changed to Bubble_mGenerator().
 //  - Macro Bubble_Generator() is added for untextured bubbles.
 //  - The randomization is simplified, and a bias towards the +x+z quadrant is corrected.
+// Version 2.0.1 modified by Richard Callwood III, 2 August 2025:
+//  - The first column of bubbles is randomized, rather than forced to the y-axis.
+//  - The usual include file wrapper is added.
 
 // Optimised for POV-Ray 3.6 (works with 3.5 ... 3.8)
 
@@ -51,6 +54,9 @@ fBblHeightRngS = bubble start radius; the radius of bubbles at sFluidY
 fBblHeightRngE = bubble end radius, the radius of bubbles at eFluidY
 columnNm = amount of randomly placed bubble columns
 bblTx = texture of bubble - required only in macro Bubble_mGenerator()
+
+Note: the above descriptions do not match the observed behavior of the macros;
+please see the User Manual. --RC
 **/
 
 /**
@@ -62,6 +68,8 @@ Example:
 
 
 
+#ifndef (Bubble_Inc_Temp) #declare Bubble_Inc_Temp = version;
+#version max (3.5, min (3.8, version)); // Bracket the POV version.
 
 // Includes
 
@@ -94,8 +102,10 @@ Example:
 #local bubble_varCounter = 1;
 
 #local bubble_varColumnCount = 0;
-#local bubble_varX = 0;
-#local bubble_varZ = 0;
+//#local bubble_varX = 0;
+//#local bubble_varZ = 0;
+#local bubble_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
+#local bubble_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
 #local bubble_varXtest = bubble_varX+fRadius;
 #local bubble_varZtest = bubble_varZ+fRadius;
 #local bubble_varFluidX = eFluidX+fRadius;
@@ -132,4 +142,8 @@ sphere { <bubble_varX, bubble_varInitHeight, bubble_varZ>, bubble_varInitBubbleH
 
 }
 
+#end // of macro Bubble_Generator()
+
+#version Bubble_Inc_Temp;
 #end
+// end of bubble.inc
