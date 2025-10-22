@@ -1,4 +1,4 @@
-/* bubble.pov version 2.0.1
+/* bubble.pov version 4.0
  * Persistence of Vision Raytracer scene description file
  * POV-Ray Object Collection demo
  *
@@ -19,17 +19,20 @@
  * Vers.  Date         Notes
  * -----  ----         -----
  * 2.0    2025-May-21  Created.
- * 2.0.1  2025-Aug-02  No change.
+ * 4.0    2025-Oct-22  Bubble expansion rate is set, and initial bubble size is
+ *                     adjusted.
  */
 // +W800 +H600 +A +R5
-// +W160 +H120 +A +R5 Declare=Cam=2 +Obubble_thumbnail
-#version 3.6;
+// +W160 +H120 +A0.0 +R5 Declare=Cam=2 +Obubble_thumbnail
+#version max (3.5, min (3.8, version));
 
 #ifndef (Cam) #declare Cam = 1; #end
 
 global_settings { assumed_gamma 1 max_trace_level 15 }
 
 #include "bubble.inc"
+
+#declare Bubble_Rate = 0.45;
 
 #declare bblTexture = texture
 { finish
@@ -39,7 +42,7 @@ global_settings { assumed_gamma 1 max_trace_level 15 }
   }
   pigment { color rgbf <1, 0.9, 0.4, 0.85> }
 }
-Bubble_mGenerator (0, 3, 0, 0, 9, 0, 3, 5, 0.0005, 0.0006, 70, bblTexture)
+Bubble_mGenerator (0, 3, 0, 0, 9, 0, 3, 5, 0.04, 0.05, 70, bblTexture)
 
 light_source { <0, 100, 0>, rgb 1 }
 
@@ -54,3 +57,4 @@ camera
     angle 60
   #end
 }
+// end of bubble.pov

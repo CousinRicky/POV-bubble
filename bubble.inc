@@ -1,7 +1,9 @@
-// bubble.inc version 2.0.1
+// bubble.inc version 4.0
 // Persistence of Vision Raytracer include file
 // POV-Ray Object Collection
-
+//
+// Carbonated fluid bubble generator
+//
 // Copyright (C) 2009 Charles Robertson.  Some rights reserved.
 // Modifications copyright (C) 2025 Richard Callwood III.  Some rights reserved.
 // This file is licensed under the terms of the GNU-LGPL
@@ -17,16 +19,22 @@
 // visit https://www.gnu.org/licenses/lgpl-3.0.html for the text
 // of the GNU Lesser General Public License version 3.
 
-// Carbonated fluid bubble generator
-// Created by Charles Robertson, 14 July 2009
-// Version 2.0 modified by Richard Callwood III, 21 May 2025:
-//  - Identifiers are brought into namespace compliance:
-//      Macro mBubbleGenerator() is changed to Bubble_mGenerator().
-//  - Macro Bubble_Generator() is added for untextured bubbles.
-//  - The randomization is simplified, and a bias towards the +x+z quadrant is corrected.
-// Version 2.0.1 modified by Richard Callwood III, 2 August 2025:
-//  - The first column of bubbles is randomized, rather than forced to the y-axis.
-//  - The usual include file wrapper is added.
+// Version 3.6 created by Charles Robertson, 14 July 2009
+//
+// Modifications by Richard Callwood III:
+//
+// Vers.  Date         Comments
+// -----  ----         --------
+// 2.0    2025-May-21  Identifiers are brought into namespace compliance:
+//                       Macro mBubbleGenerator() is changed to Bubble_mGenerator().
+//                     Macro Bubble_Generator() is added for untextured bubbles.
+//                     The randomization is simplified, and a bias towards the +x+z quadrant is corrected.
+// 2.0.1  2025-Aug-02  The first column of bubbles is randomized, rather than forced to the y-axis.
+//                     The usual include file wrapper is added.
+// 4.0    2025-Oct-22  The main macro is pretty-printed.
+//                     Expansion rate of bubbles can be controlled.
+//                     Short prefix 'bbl' is introduced.
+//                     A version identifier is added.
 
 // Optimised for POV-Ray 3.6 (works with 3.5 ... 3.8)
 
@@ -70,6 +78,12 @@ Example:
 
 #ifndef (Bubble_Inc_Temp) #declare Bubble_Inc_Temp = version;
 #version max (3.5, min (3.8, version)); // Bracket the POV version.
+#declare BUBBLE_VERSION = 4.0;
+
+// Global parameters:
+
+#ifndef (Bubble_Rate) #declare Bubble_Rate = 0.45; #end // a little more than linear pressure : cubic volume
+#ifndef (bbl__Debug) #declare bbl__Debug = false; #end
 
 // Includes
 
@@ -86,61 +100,72 @@ Example:
   { Bubble_Generator (sFluidX,sFluidY,sFluidZ,eFluidX,eFluidY,eFluidZ,fRadius,fHeightRngE,fBblHeightRngS,fBblHeightRngE,columnNm)
     texture { bblTx }
   }
-#end
+#end // of macro Bubble_mGenerator()
 
 // Bubbles without a texture
 #macro Bubble_Generator (sFluidX,sFluidY,sFluidZ,eFluidX,eFluidY,eFluidZ,fRadius,fHeightRngE,fBblHeightRngS,fBblHeightRngE,columnNm)
-#local bubble_varInitHeightRangeStart = sFluidY;
-#local bubble_varInitHeightRangeEnd = fHeightRngE;
-#local bubble_varInitBubbleHeightRangeStart = fBblHeightRngS;
-#local bubble_varInitBubbleHeightRangeEnd = fBblHeightRngE;
-#local bubble_varInitHeight = RRand(bubble_varInitHeightRangeStart,bubble_varInitHeightRangeEnd,1);
-#local bubble_varInitBubbleRange = RRand(bubble_varInitBubbleHeightRangeStart,bubble_varInitBubbleHeightRangeEnd,1);
-#local bubble_varInitBubbleHeight = bubble_varInitBubbleRange;
-#local bubble_varInitFluidHeight = eFluidY - sFluidY;
-#local bubble_varInitBubbleNumber = (bubble_varInitFluidHeight/bubble_varInitBubbleHeight)/2;
-#local bubble_varCounter = 1;
+  #local bbl_varInitHeightRangeStart = sFluidY;
+  #local bbl_varInitHeightRangeEnd = fHeightRngE;
+  #local bbl_varInitBubbleHeightRangeStart = fBblHeightRngS;
+  #local bbl_varInitBubbleHeightRangeEnd = fBblHeightRngE;
+  #local bbl_varInitHeight = RRand(bbl_varInitHeightRangeStart,bbl_varInitHeightRangeEnd,1);
+  #local bbl_varInitBubbleRange = RRand(bbl_varInitBubbleHeightRangeStart,bbl_varInitBubbleHeightRangeEnd,1);
+  #local bbl_varInitBubbleHeight = bbl_varInitBubbleRange;
+  #local bbl_varInitFluidHeight = eFluidY - sFluidY;
+  #local bbl_varInitBubbleNumber = (bbl_varInitFluidHeight/bbl_varInitBubbleHeight)/2;
+  #local bbl_varCounter = 1;
 
-#local bubble_varColumnCount = 0;
-//#local bubble_varX = 0;
-//#local bubble_varZ = 0;
-#local bubble_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
-#local bubble_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
-#local bubble_varXtest = bubble_varX+fRadius;
-#local bubble_varZtest = bubble_varZ+fRadius;
-#local bubble_varFluidX = eFluidX+fRadius;
-#local bubble_varFluidZ = eFluidZ+fRadius;
+  #local bbl_varColumnCount = 0;
+  //#local bbl_varX = 0;
+  //#local bbl_varZ = 0;
+  #local bbl_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
+  #local bbl_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
+  #local bbl_varXtest = bbl_varX+fRadius;
+  #local bbl_varZtest = bbl_varZ+fRadius;
+  #local bbl_varFluidX = eFluidX+fRadius;
+  #local bbl_varFluidZ = eFluidZ+fRadius;
 
-union{
+  union{
 
-#while (bubble_varColumnCount<columnNm)
-#while (bubble_varInitHeight<eFluidY)
-sphere { <bubble_varX, bubble_varInitHeight, bubble_varZ>, bubble_varInitBubbleHeight }
-#local bubble_varInitHeight = bubble_varInitHeight+(bubble_varInitBubbleHeight*bubble_varCounter)+(bubble_varInitBubbleHeight*2);
-#local bubble_varInitBubbleHeight = bubble_varInitBubbleHeight + (bubble_varInitBubbleHeight*(bubble_varInitHeight/10));
-#local bubble_varCounter = bubble_varCounter+1;
-#end
+    #if (bbl__Debug) #debug concat ("Sizes ", vstr (2, <fBblHeightRngS, fBblHeightRngE>, ", ", 0, 4), ":\n") #end
+    #while (bbl_varColumnCount<columnNm)
+      #if (bbl__Debug) #debug concat ("Column ", str (bbl_varColumnCount, 0, 0), "\n") #end
+      #local bbl_rFirst = bbl_varInitBubbleHeight;
+      #while (bbl_varInitHeight<eFluidY)
+        #local bbl_R = bbl_rFirst * pow (bbl_varInitBubbleHeight / bbl_rFirst, Bubble_Rate);
+        //sphere { <bbl_varX, bbl_varInitHeight, bbl_varZ>, bbl_varInitBubbleHeight }
+        sphere { <bbl_varX, bbl_varInitHeight, bbl_varZ>, bbl_R }
+        #if (bbl__Debug)
+          #debug concat
+          ( "  <", vstr (3, <bbl_varX, bbl_varInitHeight, bbl_varZ>, ", ", 0, 3), ">, ",
+            str (bbl_R, 0, 6), " // ", str (bbl_varInitBubbleHeight, 0, 6), "\n"
+          )
+        #end
+        #local bbl_varInitHeight = bbl_varInitHeight+(bbl_varInitBubbleHeight*bbl_varCounter)+(bbl_varInitBubbleHeight*2);
+        #local bbl_varInitBubbleHeight = bbl_varInitBubbleHeight + (bbl_varInitBubbleHeight*(bbl_varInitHeight/10));
+        #local bbl_varCounter = bbl_varCounter+1;
+      #end
 
-#local bubble_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
-#local bubble_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
+      #local bbl_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
+      #local bbl_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
 
-#if((bubble_varX+bubble_varInitBubbleHeight)>bubble_varFluidX)
-#local bubble_varXAdj = (bubble_varX+bubble_varInitBubbleHeight)-bubble_varFluidX;
-#local bubble_varX = bubble_varX-(bubble_varXAdj*2);
-#end
-#if((bubble_varZ+bubble_varInitBubbleHeight)>bubble_varFluidZ)
-#local bubble_varZAdj = (bubble_varZ+bubble_varInitBubbleHeight)-bubble_varFluidZ;
-#local bubble_varZ = bubble_varZ-(bubble_varZAdj*2);
-#end
+      #if((bbl_varX+bbl_varInitBubbleHeight)>bbl_varFluidX)
+        #local bbl_varXAdj = (bbl_varX+bbl_varInitBubbleHeight)-bbl_varFluidX;
+        #local bbl_varX = bbl_varX-(bbl_varXAdj*2);
+      #end
+      #if((bbl_varZ+bbl_varInitBubbleHeight)>bbl_varFluidZ)
+        #local bbl_varZAdj = (bbl_varZ+bbl_varInitBubbleHeight)-bbl_varFluidZ;
+        #local bbl_varZ = bbl_varZ-(bbl_varZAdj*2);
+      #end
 
-#local bubble_varInitHeight = RRand(bubble_varInitHeightRangeStart,bubble_varInitHeightRangeEnd,1);
-#local bubble_varInitBubbleRange = RRand(bubble_varInitBubbleHeightRangeStart,bubble_varInitBubbleHeightRangeEnd,1);
-#local bubble_varInitBubbleHeight = bubble_varInitBubbleRange;
-#local bubble_varColumnCount = bubble_varColumnCount+1;
-#local bubble_varCounter = 1;
-#end
+      #local bbl_varInitHeight = RRand(bbl_varInitHeightRangeStart,bbl_varInitHeightRangeEnd,1);
+      #local bbl_varInitBubbleRange = RRand(bbl_varInitBubbleHeightRangeStart,bbl_varInitBubbleHeightRangeEnd,1);
+      #local bbl_varInitBubbleHeight = bbl_varInitBubbleRange;
+      #local bbl_varColumnCount = bbl_varColumnCount+1;
+      #local bbl_varCounter = 1;
+    #end
 
-}
+  }
 
 #end // of macro Bubble_Generator()
 
