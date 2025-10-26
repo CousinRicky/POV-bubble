@@ -1,4 +1,4 @@
-/* bubble.pov version 4.0
+/* bubble.pov version 4.0.1
  * Persistence of Vision Raytracer scene description file
  * POV-Ray Object Collection demo
  *
@@ -21,6 +21,7 @@
  * 2.0    2025-May-21  Created.
  * 4.0    2025-Oct-22  Bubble expansion rate is set, and initial bubble size is
  *                     adjusted.
+ * 4.0.1  2025-Oct-25  No change.
  */
 // +W800 +H600 +A +R5
 // +W160 +H120 +A0.0 +R5 Declare=Cam=2 +Obubble_thumbnail

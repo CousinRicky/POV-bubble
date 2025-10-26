@@ -1,4 +1,4 @@
-// bubble.inc version 4.0
+// bubble.inc version 4.0.1
 // Persistence of Vision Raytracer include file
 // POV-Ray Object Collection
 //
@@ -35,6 +35,7 @@
 //                     Expansion rate of bubbles can be controlled.
 //                     Short prefix 'bbl' is introduced.
 //                     A version identifier is added.
+// 4.0.1  2025-Oct-25  A seemingly chaotic adjustment to the column positions is suppressed.
 
 // Optimised for POV-Ray 3.6 (works with 3.5 ... 3.8)
 
@@ -78,12 +79,13 @@ Example:
 
 #ifndef (Bubble_Inc_Temp) #declare Bubble_Inc_Temp = version;
 #version max (3.5, min (3.8, version)); // Bracket the POV version.
-#declare BUBBLE_VERSION = 4.0;
+#declare BUBBLE_VERSION = 4.01;
 
 // Global parameters:
 
-#ifndef (Bubble_Rate) #declare Bubble_Rate = 0.45; #end // a little more than linear pressure : cubic volume
-#ifndef (bbl__Debug) #declare bbl__Debug = false; #end
+#ifndef (Bubble_Rate) #declare Bubble_Rate = 0.45; #end // a little more than linear pressure : cubic volume ratio
+#ifndef (bbl__Dbg) #declare bbl__Dbg = false; #end
+#ifndef (bbl__DoAdj) #declare bbl__DoAdj = false; #end // for column position adjustment
 
 // Includes
 
@@ -127,35 +129,41 @@ Example:
 
   union{
 
-    #if (bbl__Debug) #debug concat ("Sizes ", vstr (2, <fBblHeightRngS, fBblHeightRngE>, ", ", 0, 4), ":\n") #end
+    Bbl__Debug (concat ("Sizes ", vstr (2, <fBblHeightRngS, fBblHeightRngE>, ", ", 0, 4), ":"))
     #while (bbl_varColumnCount<columnNm)
-      #if (bbl__Debug) #debug concat ("Column ", str (bbl_varColumnCount, 0, 0), "\n") #end
+      Bbl__Debug (concat ("Column ", str (bbl_varColumnCount, 0, 0)))
       #local bbl_rFirst = bbl_varInitBubbleHeight;
       #while (bbl_varInitHeight<eFluidY)
         #local bbl_R = bbl_rFirst * pow (bbl_varInitBubbleHeight / bbl_rFirst, Bubble_Rate);
         //sphere { <bbl_varX, bbl_varInitHeight, bbl_varZ>, bbl_varInitBubbleHeight }
         sphere { <bbl_varX, bbl_varInitHeight, bbl_varZ>, bbl_R }
-        #if (bbl__Debug)
-          #debug concat
+        Bbl__Debug
+        ( concat
           ( "  <", vstr (3, <bbl_varX, bbl_varInitHeight, bbl_varZ>, ", ", 0, 3), ">, ",
-            str (bbl_R, 0, 6), " // ", str (bbl_varInitBubbleHeight, 0, 6), "\n"
+            str (bbl_R, 0, 6), " // ", str (bbl_varInitBubbleHeight, 0, 6)
           )
-        #end
+        )
         #local bbl_varInitHeight = bbl_varInitHeight+(bbl_varInitBubbleHeight*bbl_varCounter)+(bbl_varInitBubbleHeight*2);
         #local bbl_varInitBubbleHeight = bbl_varInitBubbleHeight + (bbl_varInitBubbleHeight*(bbl_varInitHeight/10));
         #local bbl_varCounter = bbl_varCounter+1;
       #end
 
+      // Original randomization code (26 lines) is completely repaced here: --RC
       #local bbl_varX = RRand (sFluidX - fRadius, sFluidX + fRadius, 1);
       #local bbl_varZ = RRand (sFluidZ - fRadius, sFluidZ + fRadius, 1);
 
-      #if((bbl_varX+bbl_varInitBubbleHeight)>bbl_varFluidX)
-        #local bbl_varXAdj = (bbl_varX+bbl_varInitBubbleHeight)-bbl_varFluidX;
-        #local bbl_varX = bbl_varX-(bbl_varXAdj*2);
-      #end
-      #if((bbl_varZ+bbl_varInitBubbleHeight)>bbl_varFluidZ)
-        #local bbl_varZAdj = (bbl_varZ+bbl_varInitBubbleHeight)-bbl_varFluidZ;
-        #local bbl_varZ = bbl_varZ-(bbl_varZAdj*2);
+      #if (bbl__DoAdj)
+      // I cannot figure out what Mr. Robertson intended with the following code;
+      // I just know that it has something to do with eFluidX and eFluidZ, and shifts
+      // bubble columns outside the expected area in a non-intuitive manner. --RC
+        #if((bbl_varX+bbl_varInitBubbleHeight)>bbl_varFluidX)
+          #local bbl_varXAdj = (bbl_varX+bbl_varInitBubbleHeight)-bbl_varFluidX;
+          #local bbl_varX = bbl_varX-(bbl_varXAdj*2);
+        #end
+        #if((bbl_varZ+bbl_varInitBubbleHeight)>bbl_varFluidZ)
+          #local bbl_varZAdj = (bbl_varZ+bbl_varInitBubbleHeight)-bbl_varFluidZ;
+          #local bbl_varZ = bbl_varZ-(bbl_varZAdj*2);
+        #end
       #end
 
       #local bbl_varInitHeight = RRand(bbl_varInitHeightRangeStart,bbl_varInitHeightRangeEnd,1);
@@ -168,6 +176,12 @@ Example:
   }
 
 #end // of macro Bubble_Generator()
+
+
+#macro Bbl__Debug (S)
+  #if (bbl__Dbg) #debug S #debug "\n" #end
+#end
+
 
 #version Bubble_Inc_Temp;
 #end

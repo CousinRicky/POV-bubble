@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bubble 4.0 User Manual | POV-Ray Object Collection</title>
+<title>Bubble 4.0.1 User Manual | POV-Ray Object Collection</title>
 <style>
 table
 { border-collapse:collapse;
@@ -23,7 +23,7 @@ code
 </style>
 </head>
 
-<h1>Bubble 4.0 User Manual</h1>
+<h1>Bubble 4.0.1 User Manual</h1>
 
 <p>
 <a href="bubble.jpg" style="float:right">
@@ -67,7 +67,7 @@ Bubble is a library module from the
   <td><code>sFluidX</code></td>
   <td>float</td>
   <td rowspan="3"><code>&lt;sFluidX, sFluidY, sFluidZ></code> is the lower endpoint of the axis of the cylinder in which the bubbles emanate.
-   Note that bubbles will be created within a box that circumscribes the cylinder.
+   Note that the bubbles will be created within a box that circumscribes the cylinder.
   </td>
  </tr><tr>
   <td><code>sFluidY</code></td>
@@ -78,7 +78,7 @@ Bubble is a library module from the
  </tr><tr>
   <td><code>eFluidX</code></td>
   <td>float</td>
-  <td>Uncertain purpose (the cylinder will always be vertical)</td>
+  <td>Uncertain purpose (ostensibly the <var>x</var>-coordinate of the upper end of the cylinder axis, but that is not the observed behavior)</td>
  </tr><tr>
   <td><code>eFluidY</code></td>
   <td>float</td>
@@ -86,7 +86,7 @@ Bubble is a library module from the
  </tr><tr>
   <td><code>eFluidZ</code></td>
   <td>float</td>
-  <td>Uncertain purpose (the cylinder will always be vertical)</td>
+  <td>Uncertain purpose (ostensibly the <var>z</var>-coordinate of the upper end of the cylinder axis, but that is not the observed behavior)</td>
  </tr><tr>
   <td><code>fRadius</code></td>
   <td>float</td>
@@ -140,7 +140,7 @@ Bubble is a library module from the
   <td><code>BUBBLE_VERSION</code></td>
   <td>float</td>
   <td>The bubble library version</td>
-  <td>4.0</td>
+  <td>4.01</td>
  </tr>
 </table>
 
@@ -160,7 +160,8 @@ Bubble is a library module from the
 
 <p>This user manual was not written by the original author of this library;
 it was composed based on the observed behavior of macro <code>mBubbleGenerator()</code>.
-This has resulted in discrepancies between this manual and the comments in file <code>bubble.inc</code>.
+The accuracy of the manual therefore cannot be guaranteed.
+This has also resulted in discrepancies between this manual and the comments in file <code>bubble.inc</code>.
 
 <h3>Change Log</h3>
 
@@ -206,6 +207,15 @@ This has resulted in discrepancies between this manual and the comments in file 
     <li>The expansion rate of the bubbles can be controlled.
     <li>Short prefix ‘<code>bbl</code>’ is introduced.
     <li>A version identifier is added.
+   </ul>
+  </td>
+  <td>Richard Callwood III</td>
+ </tr><tr>
+  <td>4.0.1</td>
+  <td>25 October 2025</td>
+  <td>
+   <ul>
+    <li>A section of code that leads to unexpected results is suppressed.
    </ul>
   </td>
   <td>Richard Callwood III</td>

@@ -5,7 +5,7 @@
 Carbonated fluid bubble generator for the Persistence of Vision Raytracer (POV-Ray).
 
 Created by Charles Robertson, 14 July 2009;
-modified by Richard Callwood III, 22 October 2025.
+modified by Richard Callwood III, 25 October 2025.
 
 Description: Creates columns of bubbles, representing CO₂ inside a fluid.
 
